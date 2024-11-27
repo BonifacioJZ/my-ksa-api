@@ -3,6 +3,7 @@ package com.bonifacio.my_ksa_api.mapper.category;
 import com.bonifacio.my_ksa_api.controller.dto.CategoryDetailsDto;
 import com.bonifacio.my_ksa_api.controller.dto.CategoryInDto;
 import com.bonifacio.my_ksa_api.controller.dto.CategoryOutDto;
+import com.bonifacio.my_ksa_api.controller.dto.CategoryUpdateDto;
 import com.bonifacio.my_ksa_api.persistence.entities.CategoryEntity;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -31,5 +32,11 @@ public class CategoryMapper implements ICategoryMapper  {
     public CategoryDetailsDto categoryToCategoryDetailsDto(CategoryEntity category) {
         if(category == null) return null;
         return modelMapper.map(category,CategoryDetailsDto.class);
+    }
+
+    @Override
+    public CategoryEntity categoryUpdateDtoToCategory(CategoryUpdateDto category) {
+        if(category==null) return null;
+        return modelMapper.map(category,CategoryEntity.class);
     }
 }

@@ -3,6 +3,7 @@ package com.bonifacio.my_ksa_api.services.category;
 import com.bonifacio.my_ksa_api.controller.dto.CategoryDetailsDto;
 import com.bonifacio.my_ksa_api.controller.dto.CategoryInDto;
 import com.bonifacio.my_ksa_api.controller.dto.CategoryOutDto;
+import com.bonifacio.my_ksa_api.controller.dto.CategoryUpdateDto;
 import com.bonifacio.my_ksa_api.controller.response.Response;
 import com.bonifacio.my_ksa_api.mapper.category.ICategoryMapper;
 import com.bonifacio.my_ksa_api.persistence.entities.CategoryEntity;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -45,5 +47,30 @@ public class CategoryService implements ICategoryService {
         if (data.isEmpty()) return new Response<>("NOT FOUND",null,false);
         var out = this.categoryMapper.categoryToCategoryDetailsDto(data.get());
         return  new Response<>("FOUND",out,true);
+    }
+
+    @Override
+    public Response<CategoryOutDto> updateById(CategoryUpdateDto updateDto) {
+       try{
+
+           if(!this.categoryRepository.existsById(updateDto.getId())) return new Response<>("NOT FOUND",null,false);
+
+           CategoryEntity category = this.categoryMapper.categoryUpdateDtoToCategory(updateDto);
+           category.generateSlug();
+           category = this.categoryRepository.save(category);
+
+
+           CategoryOutDto out = this.categoryMapper.categoryToCategoryOutDto(category);
+           return new Response<>("UPDATED",out,true);
+
+       } catch (Exception e) {
+           return new Response<>(e.getMessage(),null,false);
+       }
+
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        this.categoryRepository.deleteById(id);
     }
 }
