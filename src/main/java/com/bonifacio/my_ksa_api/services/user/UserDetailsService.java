@@ -57,7 +57,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         List<String> rolesRequest = registerDto.getRoles().getRoles();
         Set<RoleEntity> roles = new HashSet<>(this.roleRepository.findRoleEntitiesByRoleEnumIn(rolesRequest));
         if(roles.isEmpty()){
-            throw new IllegalArgumentException("los roles no existen");
+            throw new IllegalArgumentException("no existen  los roles");
         }
         return null;
     }
